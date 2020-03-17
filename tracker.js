@@ -11,9 +11,17 @@ var connection = mysql.createConnection({
     database: "tracker_DB"
 });
 
-connection.connect(function (err) {
-    if (err) throw err;
-    figlet('Employee Tracker', function (err, text) {
+init();
+
+async function init() {
+    connection.connect();
+    //displayFiglet();
+    await promptUser();
+    console.log('hello')
+}
+
+async function displayFiglet() {
+    await figlet('Employee Tracker', function (err, text) {
         if (err) {
             console.log('something went wrong...');
             console.dir(err);
@@ -21,12 +29,8 @@ connection.connect(function (err) {
         }
         console.log(text);
     });
-    // console.table();
-});
-
-promptUser();
-
-function promptUser() {
+}
+async function promptUser() {
     inquirer
         .prompt([
             {
@@ -38,7 +42,7 @@ function promptUser() {
         ])
         .then(answers => {
             console.log(answers.action);
-            viewAllEmployees();
+            //viewAllEmployees();
         })
         .catch(error => {
             if (error.isTtyError) { }
@@ -55,5 +59,6 @@ function viewAllEmployees() {
 
 function addEmployee() {
     connection.query("SELECT * FROM tracker_DB.employee"), function (err, results) {
+        add();
     }
 }
