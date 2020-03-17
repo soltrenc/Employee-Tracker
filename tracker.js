@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const figlet = require("figlet");
+const conTable = require("console.table")
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -12,16 +13,18 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    // figlet('Employee Tracker', function (err, text) {
-    //     if (err) {
-    //         console.log('something went wrong...');
-    //         console.dir(err);
-    //         return;
-    //     }
-    //     console.log(text);
-    // });
-    promptUser();
+    figlet('Employee Tracker', function (err, text) {
+        if (err) {
+            console.log('something went wrong...');
+            console.dir(err);
+            return;
+        }
+        console.log(text);
+    });
+    // console.table();
 });
+
+promptUser();
 
 function promptUser() {
     inquirer
@@ -38,11 +41,8 @@ function promptUser() {
             viewAllEmployees();
         })
         .catch(error => {
-            if (error.isTtyError) {
-                // Prompt couldn't be rendered in the current environment
-            } else {
-                // Something else when wrong
-            }
+            if (error.isTtyError) { }
+            else { }
         });
 }
 
@@ -51,4 +51,9 @@ function viewAllEmployees() {
         if (err) throw err;
         console.log(results)
     })
+}
+
+function addEmployee() {
+    connection.query("SELECT * FROM tracker_DB.employee"), function (err, results) {
+    }
 }
